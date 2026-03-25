@@ -42,6 +42,22 @@ def conferma_uscita():
     else:
         finestra.destroy()
 
+def mostra_guida():
+    guida_testo = (
+        "Comandi Rapidi di Blocchino:\n"
+        "---------------------------\n"
+        "• Ctrl+N : Nuovo Documento\n"
+        "• Ctrl+O : Apri File esistente\n"
+        "• Ctrl+S : Salva le tue modifiche\n"
+        "• Ctrl+Plus/Minus : Regola lo Zoom\n"
+        "• Ctrl+Z/Y : Annulla e Ripristina\n\n"
+        "Usa il menu 'Visualizza' per cambiare il tema!"
+    )
+    messagebox.showinfo("Guida Rapida", guida_testo)
+
+def informazioni_software():
+    messagebox.showinfo("Informazioni", 
+                        "Blocchino v2.0.0a1\n")
 def zoom_in():
     font_size[0] += 2
     text_area.config(font=("Arial", font_size[0]))
@@ -59,6 +75,8 @@ def reset_zoom():
 finestra = tk.Tk()
 finestra.title("Blocchino")
 finestra.geometry("700x500")
+finestra.minsize(400, 300) # Impedisce di rimpicciolire troppo il Blocchino
+finestra.update_idletasks() # Forza l'aggiornamento dei widget
 
 text_area = tk.Text(finestra, wrap="word", font=("Arial", font_size[0]), undo=True)
 text_area.pack(expand=True, fill="both")
@@ -95,6 +113,12 @@ view_menu.add_command(label="Zoom -", command=zoom_out)
 view_menu.add_command(label="Zoom Reset", command=reset_zoom)
 menu_bar.add_cascade(label="Visualizza", menu=view_menu)
 
+# Menu Aiuto
+help_menu = tk.Menu(menu_bar, tearoff=0)
+help_menu.add_command(label="Guida all'uso", command=mostra_guida)
+help_menu.add_separator()
+help_menu.add_command(label="Informazioni su Blocchino", command=informazioni_software)
+menu_bar.add_cascade(label="Aiuto", menu=help_menu)
 finestra.config(menu=menu_bar)
 
 # --- PROTOCOLLI E BINDING ---
