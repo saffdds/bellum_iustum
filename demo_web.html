@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blocchino - Demo Online</title>
+    
+    <style>
+        :root {
+            --primary: #007bff;
+            --bg: #f4f7f6;
+            --text: #333;
+            --editor-bg: #ffffff;
+        }
+
+        .dark-mode {
+            --bg: #1e1e1e;
+            --text: #f5f5f5;
+            --editor-bg: #2d2d2d;
+            --primary: #375a7f;
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            transition: 0.3s;
+        }
+
+        /* --- NAVBAR --- */
+        nav {
+            background: var(--primary);
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-links a { color: white; text-decoration: none; margin-left: 20px; font-weight: bold; }
+
+        /* --- EDITOR AREA --- */
+        .container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 2rem;
+            max-width: 1000px;
+            margin: auto;
+            width: 100%;
+        }
+
+        #editor {
+            flex: 1;
+            width: 100%;
+            padding: 20px;
+            font-family: 'Courier New', monospace;
+            font-size: 1.1rem;
+            border: 2px solid var(--primary);
+            border-radius: 10px;
+            background-color: var(--editor-bg);
+            color: var(--text);
+            resize: none;
+            outline: none;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .toolbar {
+            margin-bottom: 1rem;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            background: var(--primary);
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+
+        button:hover { opacity: 0.8; transform: translateY(-2px); }
+
+        .status-bar {
+            margin-top: 10px;
+            font-size: 0.8rem;
+            opacity: 0.7;
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div style="color: white; font-size: 1.2rem; font-weight: bold;"> Blocchino Web-Demo</div>
+        <div class="nav-links">
+            <a href="home_blocchino.html">Home</a>
+            <a href="download_blocchino.html">Download</a>
+            <a href="aiuto_blocchino.html">Aiuto</a>
+            <a href="demo_web.html">demo web</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="toolbar">
+            <button onclick="downloadTxt()">💾 Salva .txt</button>
+            <button onclick="clearEditor()">🧹 Pulisci</button>
+            <button onclick="toggleTheme()">🌙 Tema</button>
+            <button onclick="copyToClipboard()">📋 Copia</button>
+        </div>
+
+        <textarea id="editor" placeholder="Inizia a scrivere qui... (Questa è una demo JavaScript di Blocchino 2.0)"></textarea>
+        
+        <div class="status-bar">
+            Caratteri: <span id="charCount">0</span> | Sviluppato da SAFFDDS
+        </div>
+    </div>
+
+    <script>
+        const editor = document.getElementById('editor');
+        const charCount = document.getElementById('charCount');
+
+        // Conta caratteri in tempo reale
+        editor.addEventListener('input', () => {
+            charCount.innerText = editor.value.length;
+        });
+
+        // Funzione Salva (Simula l'esportazione di Blocchino)
+        function downloadTxt() {
+            const text = editor.value;
+            const blob = new Blob([text], { type: 'text/plain' });
+            const anchor = document.createElement('a');
+            anchor.download = 'nota_blocchino.txt';
+            anchor.href = window.URL.createObjectURL(blob);
+            anchor.target = '_blank';
+            anchor.style.display = 'none';
+            document.body.appendChild(anchor);
+            anchor.click();
+            document.body.removeChild(anchor);
+        }
+
+        function clearEditor() {
+            if(confirm("Vuoi cancellare tutto il testo?")) {
+                editor.value = "";
+                charCount.innerText = 0;
+            }
+        }
+
+        function toggleTheme() {
+            document.body.classList.toggle("dark-mode");
+        }
+
+        function copyToClipboard() {
+            editor.select();
+            document.execCommand('copy');
+            alert("Testo copiato negli appunti!");
+        }
+    </script>
+</body>
+</html>

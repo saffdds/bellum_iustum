@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="refresh" content="0; url=home_blocchino.html">
+    <title>Blocchino- Reindirizzamento</title>
+    
+    <style>
+        body {
+            background-color: #0d0d0d; /* Nero profondo moderno */
+            color: #007bff;
+            font-family: 'Courier New', monospace;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .loading-text {
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.3; }
+            100% { opacity: 1; }
+        }
+    </style>
+
+    <script>
+        // REDIRECT JAVASCRIPT: Punta ora al nuovo nome file
+        window.location.replace("home_blocchino.html");
+    </script>
+</head>
+<body>
+
+    <div class="loading-text">Inizializzazione Blocchino...</div>
+    <p style="font-size: 0.8rem; color: #555; margin-top: 10px;">
+        Se il salto non avviene, <a href="home_blocchino.html" style="color: #007bff;">clicca qui</a>.
+    </p>
+
+</body>
+</html>

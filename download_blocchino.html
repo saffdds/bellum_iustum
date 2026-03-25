@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blocchino - Download Ufficiale </title>
+    
+    <style>
+        :root {
+            --primary: #28a745;
+            --bg: #f4f7f6;
+            --text: #333;
+            --card-bg: rgba(255, 255, 255, 0.9);
+        }
+
+        .dark-mode {
+            --bg: #121212;
+            --text: #f5f5f5;
+            --card-bg: rgba(30, 30, 30, 0.9);
+            --primary: #218838;
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        nav { background: #007bff; padding: 1rem; display: flex; justify-content: space-between; align-items: center; }
+        .nav-links a { color: white; text-decoration: none; margin-left: 20px; font-weight: bold; }
+
+        .container {
+            max-width: 600px;
+            margin: auto;
+            padding: 3rem;
+            background: var(--card-bg);
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .btn-direct {
+            display: inline-block;
+            background-color: var(--primary);
+            color: white;
+            padding: 20px 50px;
+            font-size: 1.5rem;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(40, 167, 69, 0.4);
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-direct:hover {
+            transform: scale(1.05);
+            background-color: #1e7e34;
+        }
+
+        .info-box {
+            margin-top: 2rem;
+            font-size: 0.85rem;
+            background: rgba(0,0,0,0.05);
+            padding: 10px;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div style="color: white; font-size: 1.5rem; font-weight: bold;">Blocchino </div>
+        <div class="nav-links">
+            <a href="home_blocchino.html">Home</a>
+            <a href="download_blocchino.html">Download</a>
+            <a href="aiuto_blocchino.html">Aiuto</a>
+            <a href="demo_web.html">demo web</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1>Scarica Blocchino</h1>
+        <p>Il download inizierà immediatamente al clic.</p>
+
+        <a href="https://github.com/saffdds/bellum_iustum/releases/download/blocchino_1.0/Blocchino.exe" 
+           class="btn-direct" 
+           download>
+            📥 SCARICA ORA (.exe)
+        </a>
+
+        <div class="info-box">
+            <p><strong>Versione:</strong> 1.0 Stable<br>
+            <strong>Sorgente:</strong> bellum_iustum / SAFFDDS<br>
+            <strong>Nota:</strong> Se il download non parte, controlla le impostazioni del browser.</p>
+        </div>
+    </div>
+
+    <footer>
+        &copy; 2026 Blocchino Project - Sviluppato da SAFFDDS.
+    </footer>
+
+</body>
+</html>

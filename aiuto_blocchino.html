@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blocchino  - Aiuto & Supporto</title>
+    
+    <style>
+        :root {
+            --primary: #007bff;
+            --bg: #f4f7f6;
+            --text: #333;
+            --card-bg: rgba(255, 255, 255, 0.9);
+        }
+
+        .dark-mode {
+            --bg: #121212;
+            --text: #f5f5f5;
+            --card-bg: rgba(30, 30, 30, 0.9);
+            --primary: #375a7f;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            transition: all 0.3s ease;
+            line-height: 1.6;
+        }
+
+        /* --- NAVBAR --- */
+        nav {
+            background: var(--primary);
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+            font-weight: bold;
+        }
+
+        /* --- CONTENUTO --- */
+        .container {
+            max-width: 850px;
+            margin: 2rem auto;
+            padding: 2.5rem;
+            background: var(--card-bg);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        h1 { border-bottom: 3px solid var(--primary); display: inline-block; padding-bottom: 5px; }
+        h2 { color: var(--primary); margin-top: 2rem; border-left: 5px solid var(--primary); padding-left: 15px; }
+
+        .faq-item {
+            margin: 20px 0;
+            padding: 15px;
+            background: rgba(0,0,0,0.03);
+            border-radius: 8px;
+        }
+
+        .dark-mode .faq-item { background: rgba(255,255,255,0.05); }
+
+        .btn-theme {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-bottom: 1.5rem;
+        }
+
+        code { background: #eee; padding: 2px 5px; border-radius: 4px; font-family: monospace; }
+        .dark-mode code { background: #333; color: #ffca28; }
+
+        footer { text-align: center; margin-top: 3rem; font-size: 0.8rem; opacity: 0.6; padding-bottom: 2rem; }
+    </style>
+
+    <script>
+        function toggleTheme() {
+            document.body.classList.toggle("dark-mode");
+        }
+    </script>
+</head>
+<body>
+
+    <nav>
+        <div style="color: white; font-size: 1.5rem; font-weight: bold;"> Blocchino Supporto</div>
+        <div class="nav-links">
+            <a href="home_blocchino.html">Home</a>
+            <a href="download_blocchino.html">Download</a>
+            <a href="aiuto_blocchino.html">Aiuto</a>
+            <a href="demo_web.html">demo web</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <button class="btn-theme" onclick="toggleTheme()">🌙 Cambia Tema</button>
+        
+        <h1>Centro Aiuto Blocchino</h1>
+        <p>Tutto quello che devi sapere per utilizzare al meglio Blocchino v1.0 e restare aggiornato sullo sviluppo della versione 2.0.</p>
+
+        <section id="guida-rapida">
+            <h2>🚀 Guida Rapida</h2>
+            <ul>
+                <li><strong>Avvio:</strong> Una volta scaricato il file <code>.exe</code>, fai doppio clic per aprirlo. Blocchino è "Portable", non sporca il tuo registro di sistema!</li>
+                <li><strong>Scrittura:</strong> Digita i tuoi testi liberamente. L'interfaccia è pulita per favorire la tua concentrazione.</li>
+                <li><strong>Salvataggio:</strong> Usa il menu interno per esportare in formato standard <code>.txt</code>.</li>
+            </ul>
+        </section>
+
+        <section id="faq">
+            <h2>❓ Domande Frequenti (FAQ)</h2>
+            
+            <div class="faq-item">
+                <strong>D: L'antivirus segnala il file come "non sicuro". Perché?</strong><br>
+                R: È un falso positivo comune per i software nuovi e indipendenti. Essendo Blocchino un progetto Open Source di <strong>SAFFDDS</strong>, puoi stare tranquillo: il codice è trasparente e sicuro. Clicca su "Esegui comunque".
+            </div>
+
+            <div class="faq-item">
+                <strong>D: Blocchino v1.0 funziona su Linux o Mac?</strong><br>
+                R: Attualmente la v1.0 è ottimizzata per Windows. Tuttavia, stiamo esplorando la compatibilità cross-platform per le future release!
+            </div>
+
+            <div class="faq-item">
+                <strong>D: Ho trovato un bug, cosa faccio?</strong><br>
+                R: Segnalalo immediatamente! Il feedback degli utenti è un vanto per noi. Puoi farlo tramite il repository GitHub.
+            </div>
+        </section>
+
+        <section id="contatti">
+            <h2>📧 Contatti e Sviluppo</h2>
+            <p>Blocchino è un progetto in continua evoluzione curato da <strong>SAFFDDS</strong>.</p>
+            <p>Per visionare il codice sorgente o collaborare, visita il repository ufficiale:</p>
+            <a href="https://github.com/saffdds/bellum_iustum" target="_blank" style="color: var(--primary); font-weight: bold; text-decoration: none;">📦 Repository GitHub: Bellum Iustum</a>
+        </section>
+    </div>
+
+    <footer>
+        &copy; 2026 Blocchino Project - Sviluppato da SAFFDDS.<br>
+        <em>"Un editor semplice per una mente complessa."</em>
+    </footer>
+
+</body>
+</html>
