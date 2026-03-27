@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blocchino - BTD (Tester)</title>
+    <style>
+        /* --- STILE MODERNO E VARIABILI --- */
+        :root {
+            --primary: #e67e22; /* Arancione per distinguere il canale tester */
+            --bg: #f4f7f6;
+            --text: #333;
+            --card-bg: rgba(255, 255, 255, 0.9);
+            --danger: #e74c3c;
+        }
+        .dark-mode {
+            --bg: #121212;
+            --text: #f5f5f5;
+            --card-bg: rgba(30, 30, 30, 0.9);
+            --primary: #d35400;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            transition: all 0.3s ease;
+            line-height: 1.6;
+        }
+        /* --- NAVBAR --- */
+        nav {
+            background: var(--primary);
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+            font-weight: bold;
+            transition: opacity 0.2s;
+        }
+        .nav-links a:hover { opacity: 0.7; }
+        /* --- LAYOUT --- */
+        .container {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: var(--card-bg);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+        }
+        #txt {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-align: right;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+        .warning-box {
+            background-color: rgba(231, 76, 60, 0.1);
+            border-left: 5px solid var(--danger);
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 5px;
+        }
+        button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            margin: 5px;
+            transition: transform 0.2s;
+        }
+        button:hover { transform: scale(1.05); }
+        .version-card {
+            border: 1px solid var(--primary);
+            padding: 1rem;
+            margin-top: 1rem;
+            border-radius: 10px;
+        }
+        h1 { border-bottom: 3px solid var(--primary); display: inline-block; padding-bottom: 5px; }
+        footer { text-align: center; margin-top: 3rem; font-size: 0.8rem; opacity: 0.6; }
+    </style>
+    <script>
+        // --- LOGICA OROLOGIO ---
+        function startTime() {
+            const today = new Date();
+            let h = today.getHours();
+            let m = today.getMinutes();
+            let s = today.getSeconds();
+            m = checkTime(m);
+            s = checkTime(s);
+            document.getElementById('txt').innerHTML = h + ":" + m + ":" + s;
+            setTimeout(startTime, 1000);
+        }
+        function checkTime(i) { return (i < 10) ? "0" + i : i; }
+        // --- ACCESSIBILITÀ ---
+        function readPage() {
+            speechSynthesis.cancel();
+            let utterance = new SpeechSynthesisUtterance(document.body.innerText);
+            utterance.lang = "it-IT";
+            speechSynthesis.speak(utterance);
+        }
+        function stopReading() { speechSynthesis.cancel(); }
+        function toggleTheme() { document.body.classList.toggle("dark-mode"); }
+    </script>
+</head>
+<body onload="startTime()">
+    <nav>
+        <div style="color: white; font-size: 1.5rem; font-weight: bold;">📋 BTD - Tester Center</div>
+        <div class="nav-links">
+            <a href="home_blocchino.html">Home</a>
+            <a href="download_blocchino.html">Dawnload</a>
+            <a href="aiuto_blocchino.html">Aiuto</a>
+            <a href="demo_web.html">demo web</a>
+        </div>
+    </nav>
+    <div class="container">
+        <div id="txt">00:00:00</div>
+        
+        <section id="accessibilita">
+            <button onclick="readPage()">🗣️ Leggi</button>
+            <button onclick="stopReading()">🛑 Stop</button>
+            <button onclick="toggleTheme()">🌙 Tema</button>
+        </section>
+
+        <h1>Blocchino Tester Download (BTD)</h1>
+        
+        <div class="warning-box">
+            <strong>⚠️ ATTENZIONE:</strong> Le versioni in questa pagina sono sperimentali (Alpha/Beta). Possono contenere bug o instabilità. Usale solo se vuoi aiutare nello sviluppo!
+        </div>
+
+        <h3>🚀 Canale Alpha (Sviluppo Attivo)</h3>
+        <div class="version-card">
+            <h4>Blocchino v2.0.0a2</h4>
+            <p>Aggiunto menu Formato, Zoom e link al sito ufficiale. Versione Alpha per test interni.</p>
+            <a href="https://github.com/saffdds/bellum_iustum/releases/download/blocchinov2.0.0a2/blocchinov2.0.0a2.exe">
+                <button>⬇️ Scarica Alpha 2.0.0a2</button>
+            </a>
+        </div>
+
+        <h3>🧪 Canale Beta (Prossimamente)</h3>
+        <p>Il canale Beta verrà attivato non appena le funzioni della serie 2.0 saranno completate.</p>
+
+        <hr style="margin: 2rem 0; opacity: 0.2;">
+        <p>Hai trovato un bug? Segnalalo nella <a href="https://github.com/saffdds/bellum_iustum/issues">repository ufficiale</a>.</p>
+    </div>
+    <footer>
+        &copy; 2026 Blocchino Project - Area Tester Riservata
+    </footer>
+</body>
+</html>
