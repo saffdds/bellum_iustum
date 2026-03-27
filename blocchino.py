@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import filedialog
 from tkinter import messagebox
+import webbrowser
 
 # --- CONFIGURAZIONE ---
 font_size = [12]
@@ -57,7 +58,7 @@ def mostra_guida():
 
 def informazioni_software():
     messagebox.showinfo("Informazioni", 
-                        "Blocchino v2.0.0a1\n")
+                        "Blocchino v2.0.0a2 ,Sviluppata Saffdds\n")
 def zoom_in():
     font_size[0] += 2
     text_area.config(font=("Arial", font_size[0]))
@@ -70,6 +71,34 @@ def zoom_out():
 def reset_zoom():
     font_size[0] = 12
     text_area.config(font=("Arial", font_size[0]))
+    
+    # --- FUNZIONI DI FORMATO ---
+def testo_maiuscolo():
+    try:
+        # Nota: start e end devono essere indentati di 4 spazi (o un Tab)
+        start = text_area.index("sel.first")
+        end = text_area.index("sel.last")
+        selected_text = text_area.get(start, end)
+        
+        text_area.delete(start, end)
+        text_area.insert(start, selected_text.upper())
+    except tk.TclError:
+        messagebox.showwarning("Formato", "Seleziona del testo per renderlo MAIUSCOLO!")
+
+def testo_minuscolo():
+    try:
+        start = text_area.index("sel.first")
+        end = text_area.index("sel.last")
+        selected_text = text_area.get(start, end)
+        
+        text_area.delete(start, end)
+        text_area.insert(start, selected_text.lower())
+    except tk.TclError:
+        messagebox.showwarning("Formato", "Seleziona del testo per renderlo minuscolo!")
+
+def vai_al_sito():
+    # Sostituisci l'URL con quello reale del tuo sito di Blocchino!
+    webbrowser.open("https://saffdds.github.io/bellum_iustum/aiuto_blocchino.html")
 
 # --- INTERFACCIA ---
 finestra = tk.Tk()
@@ -103,6 +132,16 @@ edit_menu.add_command(label="Annulla (Ctrl+Z)", command=lambda: text_area.edit_u
 edit_menu.add_command(label="Ripristina (Ctrl+Y)", command=lambda: text_area.edit_redo())
 menu_bar.add_cascade(label="Modifica", menu=edit_menu)
 
+# --- MENU FORMATO ---
+format_menu = tk.Menu(menu_bar, tearoff=0)
+# Colleghiamo la voce "MAIUSCOLO" alla funzione che hai appena sistemato
+format_menu.add_command(label="MAIUSCOLO", command=testo_maiuscolo)
+# Colleghiamo la voce "minuscolo"
+format_menu.add_command(label="minuscolo", command=testo_minuscolo)
+
+# Aggiungiamo il menu "Formato" alla barra principale
+menu_bar.add_cascade(label="Formato", menu=format_menu)
+
 # Menu Visualizza
 view_menu = tk.Menu(menu_bar, tearoff=0)
 view_menu.add_command(label="Tema Chiaro", command=lambda: text_area.config(bg="white", fg="black", insertbackground="black"))
@@ -116,6 +155,7 @@ menu_bar.add_cascade(label="Visualizza", menu=view_menu)
 # Menu Aiuto
 help_menu = tk.Menu(menu_bar, tearoff=0)
 help_menu.add_command(label="Guida all'uso", command=mostra_guida)
+help_menu.add_command(label="Pagina di supporto", command=vai_al_sito)
 help_menu.add_separator()
 help_menu.add_command(label="Informazioni su Blocchino", command=informazioni_software)
 menu_bar.add_cascade(label="Aiuto", menu=help_menu)
