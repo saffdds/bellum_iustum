@@ -145,7 +145,7 @@ def vai_al_sito():
     webbrowser.open("https://saffdds.github.io/bellum_iustum/aiuto_blocchino.html")
 
 def informazioni_software():
-    messagebox.showinfo("Informazioni", "Blocchino v2.0.0a3\nAutore: Saffdds\nStato: Operativo")
+    messagebox.showinfo("Informazioni", "Blocchino v2.0.0b1\nAutore: Saffdds\nStato: Operativo")
 
 # --- INTERFACCIA ---
 finestra = tk.Tk()
@@ -168,19 +168,19 @@ file_menu.add_command(label="Nuovo (Ctrl+N)", command=nuovo_file)
 file_menu.add_command(label="Apri (Ctrl+O)", command=apri_file)
 file_menu.add_command(label="Salva (Ctrl+S)", command=salva_file)
 file_menu.add_separator()
-file_menu.add_checkbutton(label="Il dittatore Salvatore", variable=auto_save_attivo)
+file_menu.add_checkbutton(label="Salvataggio automatico", variable=auto_save_attivo)
 file_menu.add_separator()
-file_menu.add_command(label="Esci", command=conferma_uscita)
+file_menu.add_command(label="Esci (Esc)", command=conferma_uscita)
 menu_bar.add_cascade(label="File", menu=file_menu)
 
 # Menu Modifica
 edit_menu = tk.Menu(menu_bar, tearoff=0)
-edit_menu.add_command(label="Taglia", command=lambda: text_area.event_generate("<<Cut>>"))
-edit_menu.add_command(label="Copia", command=lambda: text_area.event_generate("<<Copy>>"))
-edit_menu.add_command(label="Incolla", command=lambda: text_area.event_generate("<<Paste>>"))
+edit_menu.add_command(label="Taglia (Ctrl+X)", command=lambda: text_area.event_generate("<<Cut>>"))
+edit_menu.add_command(label="Copia (Ctrl+C)", command=lambda: text_area.event_generate("<<Copy>>"))
+edit_menu.add_command(label="Incolla (Ctrl+V)", command=lambda: text_area.event_generate("<<Paste>>"))
 edit_menu.add_separator()
-edit_menu.add_command(label="Annulla", command=lambda: text_area.edit_undo())
-edit_menu.add_command(label="Ripristina", command=lambda: text_area.edit_redo())
+edit_menu.add_command(label="Annulla (Ctrl+Z)", command=lambda: text_area.edit_undo())
+edit_menu.add_command(label="Ripristina (Ctrl+Y)", command=lambda: text_area.edit_redo())
 edit_menu.add_separator()
 edit_menu.add_command(label="Impostazioni ⚙️", command=apri_impostazioni)
 menu_bar.add_cascade(label="Modifica", menu=edit_menu)
@@ -206,14 +206,32 @@ help_menu = tk.Menu(menu_bar, tearoff=0)
 help_menu.add_command(label="Guida all'uso", command=mostra_guida)
 help_menu.add_command(label="Sito di Supporto", command=vai_al_sito)
 help_menu.add_separator()
-help_menu.add_command(label="Informazioni", command=informazioni_software)
+help_menu.add_command(label="Informazioni su blocchino", command=informazioni_software)
 menu_bar.add_cascade(label="Aiuto", menu=help_menu)
 
 finestra.config(menu=menu_bar)
 finestra.protocol("WM_DELETE_WINDOW", conferma_uscita)
 
 # Binding scorciatoie
-bindings = [("<Control-n>", nuovo_file), ("<Control-o>", apri_file), ("<Control-s>", salva_file)]
+bindings = [("<Control-n>", nuovo_file),
+            ("<Control-N>", nuovo_file), 
+            ("<Control-o>", apri_file),
+            ("<Control-O>", apri_file),
+            ("<Control-s>", salva_file),
+            ("<Control-S>", salva_file),
+            ("<Escape>", conferma_uscita),
+            ("<Control-plus>", zoom_in),
+            ("<Control-minus>", zoom_out),
+            ("<Control-0>", reset_zoom),
+            ("<Control-z>", text_area.edit_undo),
+            ("<Control-Z>", text_area.edit_undo),
+            ("<Control-y>", text_area.edit_redo), 
+            ("<Control-Y>", text_area.edit_redo),
+            # Scorciatoie per Taglia/Copia/Incolla (Maiuscole)
+            ("<Control-X>", lambda e: text_area.event_generate("<<Cut>>")),
+            ("<Control-C>", lambda e: text_area.event_generate("<<Copy>>")),
+            ("<Control-V>", lambda e: text_area.event_generate("<<Paste>>")),
+            ]
 for key, func in bindings: finestra.bind(key, lambda e, f=func: f())
 
 # --- AVVIO ---
