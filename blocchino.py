@@ -145,7 +145,7 @@ def vai_al_sito():
     webbrowser.open("https://saffdds.github.io/bellum_iustum/aiuto_blocchino.html")
 
 def informazioni_software():
-    messagebox.showinfo("Informazioni", "Blocchino v2.0.0b1\nAutore: Saffdds\nStato: Operativo")
+    messagebox.showinfo("Informazioni", "Blocchino v2.0.0RC1\nAutore: Saffdds\nStato: Operativo")
 
 # --- INTERFACCIA ---
 finestra = tk.Tk()
