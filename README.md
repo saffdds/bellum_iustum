@@ -1,6 +1,6 @@
 # 🏛️ BLOCCHINO - Progetto Bellum Iustum
 
-> Status: Operativo | Versione: 1.0 (Rinascita) | saffdds: Riservato
+> Status: Operativo | Versione: 2.0.0 (Rinascita) | saffdds: Riservato
 
 ## ❓ Che cos'è Blocchino?
 Blocchino è il software gestionale e testuale definitivo dell'saffdds. Non è un semplice editor di testo, ma un ambiente protetto e centralizzato, sviluppato per eliminare il caos informativo e stabilire la Pax Admina sui dati personali.
@@ -27,3 +27,5 @@ Il nome richiama la "Guerra Giusta": un conflitto necessario contro il disordine
 ---
 SPQR - *Senatus Populusque Romanus*
 *Fondato dall'saffdds - Marzo 2026*
+## Sito
+*[Blocchino](https://saffdds.github.io/bellum_iustum/)*
