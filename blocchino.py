@@ -67,6 +67,7 @@ def nuovo_file():
         elif risposta is None: return
     text_area.delete(1.0, tk.END)
     file_corrente[0] = os.path.join(cartella_safe[0], "Blocchino_AutoSave.txt")
+    aggiorna_conteggio() # Aggiorna contatore a zero
     aggiorna_stato("Nuovo documento creato")
 
 def apri_file():
@@ -76,6 +77,7 @@ def apri_file():
             text_area.delete(1.0, tk.END)
             text_area.insert(tk.END, f.read())
             file_corrente[0] = path
+            aggiorna_conteggio() # Aggiorna contatore con il testo aperto
             aggiorna_stato(f"Aperto: {os.path.basename(path)}")
 
 def salva_file():
@@ -114,6 +116,7 @@ def testo_maiuscolo():
         txt = text_area.get(start, end).upper()
         text_area.delete(start, end)
         text_area.insert(start, txt)
+        aggiorna_conteggio() # Aggiorna dopo modifica
     except: aggiorna_stato("⚠️ Seleziona testo!")
 
 def testo_minuscolo():
@@ -122,6 +125,7 @@ def testo_minuscolo():
         txt = text_area.get(start, end).lower()
         text_area.delete(start, end)
         text_area.insert(start, txt)
+        aggiorna_conteggio() # Aggiorna dopo modifica
     except: aggiorna_stato("⚠️ Seleziona testo!")
 
 # --- SUPPORTO E GUIDA ---
@@ -145,7 +149,13 @@ def vai_al_sito():
     webbrowser.open("https://saffdds.github.io/bellum_iustum/aiuto_blocchino.html")
 
 def informazioni_software():
-    messagebox.showinfo("Informazioni", "Blocchino v2.0.0\nAutore: Saffdds\nStato: Operativo")
+    messagebox.showinfo("Informazioni", "Blocchino v2.1.0\nAutore: Saffdds\nStato: Operativo")
+
+def aggiorna_conteggio(event=None):
+    # Prende il testo escludendo il carattere invisibile finale di tkinter
+    contenuto = text_area.get(1.0, "end-1c")
+    numero_caratteri = len(contenuto)
+    label_caratteri.config(text=f"Caratteri: {numero_caratteri}")
 
 # --- INTERFACCIA ---
 finestra = tk.Tk()
@@ -156,8 +166,15 @@ auto_save_attivo = tk.BooleanVar(value=False)
 text_area = tk.Text(finestra, wrap="word", font=("Arial", font_size[0]), undo=True)
 text_area.pack(expand=True, fill="both")
 
-label_stato = tk.Label(finestra, text="Pronto", bd=1, relief=tk.SUNKEN, anchor=tk.W)
-label_stato.pack(side=tk.BOTTOM, fill=tk.X)
+# --- NUOVA BARRA DI STATO CONDIVISA ---
+frame_stato = tk.Frame(finestra, bd=1, relief=tk.SUNKEN)
+frame_stato.pack(side=tk.BOTTOM, fill=tk.X)
+
+label_stato = tk.Label(frame_stato, text="Pronto", anchor=tk.W)
+label_stato.pack(side=tk.LEFT, fill=tk.X)
+
+label_caratteri = tk.Label(frame_stato, text="Caratteri: 0", anchor=tk.E, padx=10)
+label_caratteri.pack(side=tk.RIGHT)
 
 # --- MENU ---
 menu_bar = tk.Menu(finestra)
@@ -212,7 +229,7 @@ menu_bar.add_cascade(label="Aiuto", menu=help_menu)
 finestra.config(menu=menu_bar)
 finestra.protocol("WM_DELETE_WINDOW", conferma_uscita)
 
-# Binding scorciatoie
+# Binding scorciatoie (TUTTE MANTENUTE)
 bindings = [("<Control-n>", nuovo_file),
             ("<Control-N>", nuovo_file), 
             ("<Control-o>", apri_file),
@@ -227,12 +244,14 @@ bindings = [("<Control-n>", nuovo_file),
             ("<Control-Z>", text_area.edit_undo),
             ("<Control-y>", text_area.edit_redo), 
             ("<Control-Y>", text_area.edit_redo),
-            # Scorciatoie per Taglia/Copia/Incolla (Maiuscole)
             ("<Control-X>", lambda e: text_area.event_generate("<<Cut>>")),
             ("<Control-C>", lambda e: text_area.event_generate("<<Copy>>")),
             ("<Control-V>", lambda e: text_area.event_generate("<<Paste>>")),
             ]
 for key, func in bindings: finestra.bind(key, lambda e, f=func: f())
+
+# --- ATTIVAZIONE CONTEGGIO TEMPO REALE ---
+text_area.bind("<KeyRelease>", aggiorna_conteggio)
 
 # --- AVVIO ---
 threading.Thread(target=auto_save_sentinel, daemon=True).start()
