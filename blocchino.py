@@ -1,8 +1,6 @@
 import tkinter as tk
 from tkinter import filedialog, messagebox
 import webbrowser
-import threading
-import time
 import os
 
 # --- LOGICA PERCORSO (Iniziale Blindata OneDrive) ---
@@ -19,18 +17,18 @@ font_size = [12]
 cartella_safe = [ottieni_percorso_iniziale()]
 file_corrente = [os.path.join(cartella_safe[0], "Blocchino_AutoSave.txt")]
 
-# --- LOGICA AUTO-SAVE (Il Dittatore Salvatore) ---
+# --- LOGICA AUTO-SAVE (Ottimizzata nativamente senza Thread instabili) ---
 def auto_save_sentinel():
-    while True:
-        if auto_save_attivo.get() and file_corrente[0]:
-            try:
-                contenuto = text_area.get(1.0, tk.END)
-                with open(file_corrente[0], "w", encoding="utf-8") as f:
-                    f.write(contenuto)
-                aggiorna_stato(f"✅ Backup automatico eseguito")
-            except Exception as e:
-                aggiorna_stato(f"❌ Errore Auto-Save")
-        time.sleep(30)
+    if auto_save_attivo.get() and file_corrente[0]:
+        try:
+            contenuto = text_area.get(1.0, tk.END)
+            with open(file_corrente[0], "w", encoding="utf-8") as f:
+                f.write(contenuto)
+            aggiorna_stato("✅ Backup automatico eseguito")
+        except Exception as e:
+            aggiorna_stato("❌ Errore Auto-Save")
+    # Riesegue la funzione in modo sicuro ogni 30 secondi (30000 millisecondi)
+    finestra.after(30000, auto_save_sentinel)
 
 def aggiorna_stato(messaggio):
     label_stato.config(text=messaggio)
@@ -60,55 +58,66 @@ def apri_impostazioni():
     tk.Button(win_settings, text="Chiudi", command=win_settings.destroy).pack(pady=10)
 
 # --- FUNZIONI DI FILE ---
-def nuovo_file():
+def nuovo_file(event=None):
     if text_area.get(1.0, "end-1c").strip():
         risposta = messagebox.askyesnocancel("Nuovo File", "Vuoi salvare prima?")
         if risposta is True: salva_file()
-        elif risposta is None: return
+        elif risposta is None: return "break"
     text_area.delete(1.0, tk.END)
     file_corrente[0] = os.path.join(cartella_safe[0], "Blocchino_AutoSave.txt")
-    aggiorna_conteggio() # Aggiorna contatore a zero
+    aggiorna_conteggio()
     aggiorna_stato("Nuovo documento creato")
+    return "break"
 
-def apri_file():
+def apri_file(event=None):
     path = filedialog.askopenfilename(filetypes=[("File di testo", "*.txt")])
     if path:
         with open(path, "r", encoding="utf-8") as f:
             text_area.delete(1.0, tk.END)
             text_area.insert(tk.END, f.read())
             file_corrente[0] = path
-            aggiorna_conteggio() # Aggiorna contatore con il testo aperto
+            aggiorna_conteggio()
             aggiorna_stato(f"Aperto: {os.path.basename(path)}")
+    return "break"
 
-def salva_file():
+def salva_file(event=None):
     if "Blocchino_AutoSave.txt" in file_corrente[0] or not file_corrente[0]:
         path = filedialog.asksaveasfilename(defaultextension=".txt", filetypes=[("File di testo", "*.txt")])
         if path: file_corrente[0] = path
-        else: return
+        else: return "break"
     with open(file_corrente[0], "w", encoding="utf-8") as f:
         f.write(text_area.get(1.0, tk.END))
-        aggiorna_stato("💾 Salvataggio completato")
+    aggiorna_stato("💾 Salvataggio completato")
+    return "break"
 
-def conferma_uscita():
+def conferma_uscita(event=None):
     if text_area.get(1.0, "end-1c").strip():
         risposta = messagebox.askyesnocancel("Esci", "Vuoi salvare prima di uscire?")
-        if risposta is True: salva_file(); finestra.destroy()
-        elif risposta is False: finestra.destroy()
-    else: finestra.destroy()
+        if risposta is True: 
+            salva_file()
+            finestra.destroy()
+        elif risposta is False: 
+            finestra.destroy()
+    else: 
+        finestra.destroy()
+    return "break"
 
 # --- FUNZIONI FORMATO E ZOOM ---
-def zoom_in():
+def zoom_in(event=None):
     font_size[0] += 2
     text_area.config(font=("Arial", font_size[0]))
+    return "break"
 
-def zoom_out():
+def zoom_out(event=None):
     if font_size[0] > 6:
         font_size[0] -= 2
         text_area.config(font=("Arial", font_size[0]))
+    return "break"
 
-def reset_zoom():
+def reset_zoom(event=None):
     font_size[0] = 12
     text_area.config(font=("Arial", font_size[0]))
+    return "break"
 
 def testo_maiuscolo():
     try:
@@ -116,8 +125,9 @@ def testo_maiuscolo():
         txt = text_area.get(start, end).upper()
         text_area.delete(start, end)
         text_area.insert(start, txt)
-        aggiorna_conteggio() # Aggiorna dopo modifica
-    except: aggiorna_stato("⚠️ Seleziona testo!")
+        aggiorna_conteggio()
+    except: 
+        aggiorna_stato("⚠️ Seleziona testo!")
 
 def testo_minuscolo():
     try:
@@ -125,8 +135,9 @@ def testo_minuscolo():
         txt = text_area.get(start, end).lower()
         text_area.delete(start, end)
         text_area.insert(start, txt)
-        aggiorna_conteggio() # Aggiorna dopo modifica
-    except: aggiorna_stato("⚠️ Seleziona testo!")
+        aggiorna_conteggio()
+    except: 
+        aggiorna_stato("⚠️ Seleziona testo!")
 
 # --- SUPPORTO E GUIDA ---
 def mostra_guida():
@@ -140,7 +151,7 @@ def mostra_guida():
         "SALVATAGGIO AUTOMATICO:\n"
         "Attiva 'Il dittatore Salvatore' nel menu File.\n"
         "Salva ogni 30 secondi nella tua cartella DOCUMENTI.\n"
-        f"Percorso attuale: {cartella_safe[0]}\n"
+        "Percorso attuale: {cartella_safe[0]}\n"
         "Puoi cambiare il percorso in Modifica -> Impostazioni ⚙️!"
     )
     messagebox.showinfo("Guida all'uso", guida_testo)
@@ -149,10 +160,9 @@ def vai_al_sito():
     webbrowser.open("https://saffdds.github.io/bellum_iustum/aiuto_blocchino.html")
 
 def informazioni_software():
-    messagebox.showinfo("Informazioni", "Blocchino v2.1.0\nAutore: Saffdds\nStato: Operativo")
+    messagebox.showinfo("Informazioni", "Blocchino v2.1.1\nAutore: Saffdds\nStato: Operativo")
 
 def aggiorna_conteggio(event=None):
-    # Prende il testo escludendo il carattere invisibile finale di tkinter
     contenuto = text_area.get(1.0, "end-1c")
     numero_caratteri = len(contenuto)
     label_caratteri.config(text=f"Caratteri: {numero_caratteri}")
@@ -229,30 +239,25 @@ menu_bar.add_cascade(label="Aiuto", menu=help_menu)
 finestra.config(menu=menu_bar)
 finestra.protocol("WM_DELETE_WINDOW", conferma_uscita)
 
-# Binding scorciatoie (TUTTE MANTENUTE)
-bindings = [("<Control-n>", nuovo_file),
-            ("<Control-N>", nuovo_file), 
-            ("<Control-o>", apri_file),
-            ("<Control-O>", apri_file),
-            ("<Control-s>", salva_file),
-            ("<Control-S>", salva_file),
+# Binding scorciatoie (Gestione lambda corretta ed evitamento duplicazioni)
+bindings = [("<Control-n>", nuovo_file), ("<Control-N>", nuovo_file), 
+            ("<Control-o>", apri_file), ("<Control-O>", apri_file),
+            ("<Control-s>", salva_file), ("<Control-S>", salva_file),
             ("<Escape>", conferma_uscita),
-            ("<Control-plus>", zoom_in),
-            ("<Control-minus>", zoom_out),
-            ("<Control-0>", reset_zoom),
-            ("<Control-z>", text_area.edit_undo),
-            ("<Control-Z>", text_area.edit_undo),
-            ("<Control-y>", text_area.edit_redo), 
-            ("<Control-Y>", text_area.edit_redo),
+            ("<Control-plus>", zoom_in), ("<Control-minus>", zoom_out), ("<Control-0>", reset_zoom),
+            ("<Control-z>", lambda e: text_area.edit_undo()), ("<Control-Z>", lambda e: text_area.edit_undo()),
+            ("<Control-y>", lambda e: text_area.edit_redo()), ("<Control-Y>", lambda e: text_area.edit_redo()),
             ("<Control-X>", lambda e: text_area.event_generate("<<Cut>>")),
             ("<Control-C>", lambda e: text_area.event_generate("<<Copy>>")),
-            ("<Control-V>", lambda e: text_area.event_generate("<<Paste>>")),
-            ]
-for key, func in bindings: finestra.bind(key, lambda e, f=func: f())
+            ("<Control-V>", lambda e: text_area.event_generate("<<Paste>>"))]
 
-# --- ATTIVAZIONE CONTEGGIO TEMPO REALE ---
+for key, func in bindings: 
+    finestra.bind(key, func)
+
+# --- ATTIVAZIONE CONTEGGIO E AGGIORNAMENTO AGGIUNTIVO ---
 text_area.bind("<KeyRelease>", aggiorna_conteggio)
 
-# --- AVVIO ---
-threading.Thread(target=auto_save_sentinel, daemon=True).start()
+# --- AVVIO INTERFACCIA E CICLO AUTO-SAVE DIVINO ---
+finestra.after(30000, auto_save_sentinel)
+aggiorna_conteggio()  # Esegue un primo calcolo al boot
 finestra.mainloop()
