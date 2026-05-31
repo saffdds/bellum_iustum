@@ -57,6 +57,93 @@ def apri_impostazioni():
     tk.Button(win_settings, text="Cambia Cartella", command=cambia_percorso).pack(pady=5)
     tk.Button(win_settings, text="Chiudi", command=win_settings.destroy).pack(pady=10)
 
+# --- FUNZIONE TROVA E SOSTITUISCI ALPHA (Novità v3.0.0-alpha.1) ---
+def apri_trova_sostituisci(event=None):
+    win_find = tk.Toplevel(finestra)
+    win_find.title("Trova e Sostituisci")
+    win_find.geometry("420x180")
+    win_find.resizable(False, False)
+    win_find.transient(finestra) # Resta sopra la finestra principale
+
+    tk.Label(win_find, text="Trova:").grid(row=0, column=0, padx=10, pady=10, sticky="w")
+    entry_trova = tk.Entry(win_find, width=30)
+    entry_trova.grid(row=0, column=1, padx=10, pady=10)
+    entry_trova.focus_set()
+
+    tk.Label(win_find, text="Sostituisci con:").grid(row=1, column=0, padx=10, pady=10, sticky="w")
+    entry_sostituisci = tk.Entry(win_find, width=30)
+    entry_sostituisci.grid(row=1, column=1, padx=10, pady=10)
+
+    # Rimuove l'evidenziazione precedente quando si chiude la finestra
+    def pulisci_e_chiudi():
+        text_area.tag_remove("match", "1.0", tk.END)
+        win_find.destroy()
+    win_find.protocol("WM_DELETE_WINDOW", pulisci_e_chiudi)
+
+    def esegui_trova():
+        text_area.tag_remove("match", "1.0", tk.END)
+        parola = entry_trova.get()
+        if not parola:
+            aggiorna_stato("⚠️ Inserisci una parola da cercare!")
+            return
+
+        inizio = "1.0"
+        contatore = 0
+        while True:
+            inizio = text_area.search(parola, inizio, stopindex=tk.END)
+            if not inizio: break
+            fine = f"{inizio}+{len(parola)}c"
+            text_area.tag_add("match", inizio, fine)
+            if contatore == 0:
+                text_area.see(inizio) # Scorre la visuale sul primo match
+            inizio = fine
+            contatore += 1
+
+        text_area.tag_config("match", background="yellow", foreground="black")
+        aggiorna_stato(f"🔍 Trovati {contatore} riscontri per '{parola}'")
+
+    def esegui_sostituisci():
+        parola = entry_trova.get()
+        nuova_parola = entry_sostituisci.get()
+        if not parola: return
+
+        # Trova il primo match disponibile a partire dall'inizio
+        inizio = text_area.search(parola, "1.0", stopindex=tk.END)
+        if inizio:
+            fine = f"{inizio}+{len(parola)}c"
+            text_area.delete(inizio, fine)
+            text_area.insert(inizio, nuova_parola)
+            esegui_trova() # Riesegue il calcolo per aggiornare i tag evidenziati
+            aggiorna_stato("✅ Sostituzione eseguita")
+        else:
+            aggiorna_stato("⚠️ Nessun match trovato da sostituire!")
+
+    def esegui_sostituisci_tutto():
+        parola = entry_trova.get()
+        nuova_parola = entry_sostituisci.get()
+        if not parola: return
+
+        contenuto = text_area.get(1.0, "end-1c")
+        contatore = contenuto.count(parola)
+        
+        if contatore > 0:
+            nuovo_contenuto = contenuto.replace(parola, nuova_parola)
+            text_area.delete(1.0, tk.END)
+            text_area.insert(1.0, nuovo_contenuto)
+            aggiorna_conteggio()
+            aggiorna_stato(f"⚡ Sostituite {contatore} occorrenze!")
+            text_area.tag_remove("match", "1.0", tk.END)
+        else:
+            aggiorna_stato("⚠️ Parola non trovata!")
+
+    # Layout Pulsanti
+    frame_btn = tk.Frame(win_find)
+    frame_btn.grid(row=2, column=0, columnspan=2, pady=15)
+
+    tk.Button(frame_btn, text="Trova", command=esegui_trova, width=10).pack(side=tk.LEFT, padx=5)
+    tk.Button(frame_btn, text="Sostituisci", command=esegui_sostituisci, width=10).pack(side=tk.LEFT, padx=5)
+    tk.Button(frame_btn, text="Sostituisci Tutto", command=esegui_sostituisci_tutto, width=13).pack(side=tk.LEFT, padx=5)
+
 # --- FUNZIONI DI FILE ---
 def nuovo_file(event=None):
     if text_area.get(1.0, "end-1c").strip():
@@ -147,6 +234,7 @@ def mostra_guida():
         "• Ctrl+N : Nuovo Documento\n"
         "• Ctrl+O : Apri File esistente\n"
         "• Ctrl+S : Salva Manuale\n"
+        "• F4 o Ctrl+F : Trova e Sostituisci 🔍\n"
         "• Ctrl+Plus/Minus : Regola lo Zoom\n\n"
         "SALVATAGGIO AUTOMATICO:\n"
         "Attiva 'Il dittatore Salvatore' nel menu File.\n"
@@ -160,7 +248,7 @@ def vai_al_sito():
     webbrowser.open("https://saffdds.github.io/bellum_iustum/aiuto_blocchino.html")
 
 def informazioni_software():
-    messagebox.showinfo("Informazioni", "Blocchino v2.1.1\nAutore: Saffdds\nStato: Operativo")
+    messagebox.showinfo("Informazioni", "Blocchino v3.0.0a1\nAutore: Saffdds\nStato: Sviluppo Alpha")
 
 def aggiorna_conteggio(event=None):
     contenuto = text_area.get(1.0, "end-1c")
@@ -206,6 +294,8 @@ edit_menu.add_command(label="Taglia (Ctrl+X)", command=lambda: text_area.event_g
 edit_menu.add_command(label="Copia (Ctrl+C)", command=lambda: text_area.event_generate("<<Copy>>"))
 edit_menu.add_command(label="Incolla (Ctrl+V)", command=lambda: text_area.event_generate("<<Paste>>"))
 edit_menu.add_separator()
+edit_menu.add_command(label="Trova e Sostituisci (F4)", command=apri_trova_sostituisci) # Nuova Voce Menu
+edit_menu.add_separator()
 edit_menu.add_command(label="Annulla (Ctrl+Z)", command=lambda: text_area.edit_undo())
 edit_menu.add_command(label="Ripristina (Ctrl+Y)", command=lambda: text_area.edit_redo())
 edit_menu.add_separator()
@@ -239,11 +329,12 @@ menu_bar.add_cascade(label="Aiuto", menu=help_menu)
 finestra.config(menu=menu_bar)
 finestra.protocol("WM_DELETE_WINDOW", conferma_uscita)
 
-# Binding scorciatoie (Gestione lambda corretta ed evitamento duplicazioni)
+# Binding scorciatoie (Iniezione di F4 e Ctrl+F ridondante per la Alpha 1)
 bindings = [("<Control-n>", nuovo_file), ("<Control-N>", nuovo_file), 
             ("<Control-o>", apri_file), ("<Control-O>", apri_file),
             ("<Control-s>", salva_file), ("<Control-S>", salva_file),
             ("<Escape>", conferma_uscita),
+            ("<F4>", apri_trova_sostituisci), ("<Control-f>", apri_trova_sostituisci), ("<Control-F>", apri_trova_sostituisci),
             ("<Control-plus>", zoom_in), ("<Control-minus>", zoom_out), ("<Control-0>", reset_zoom),
             ("<Control-z>", lambda e: text_area.edit_undo()), ("<Control-Z>", lambda e: text_area.edit_undo()),
             ("<Control-y>", lambda e: text_area.edit_redo()), ("<Control-Y>", lambda e: text_area.edit_redo()),
