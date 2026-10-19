@@ -423,7 +423,6 @@ def reset_zoom(event=None):
 
 
 def aggiorna_font_totale():
-    # Mantiene la famiglia corrente ma aggiorna la dimensione
     current_font = text_area.cget("font").split()
     family = current_font[0] if current_font else "Arial"
     text_area.config(font=(family, font_size[0]))
@@ -438,7 +437,6 @@ def applica_stile_testo(tipo):
         family = current_font[0] if current_font else "Arial"
         size = font_size[0]
 
-        # Verifica tag attivi sulla selezione
         tag_names = text_area.tag_names(start)
 
         if tipo == "bold":
@@ -531,9 +529,9 @@ def vai_al_sito():
 def informazioni_software():
     messagebox.showinfo(
         "Informazioni",
-        "Blocchino v3.0.0a3\n"
+        "Blocchino v3.0.0 Beta 1\n"
         "Autore: Saffdds\n"
-        "Stato: Sviluppo Alpha\n"
+        "Stato: Sviluppo Beta\n"
         "Supporto: TXT + HTML + Markdown",
     )
 
@@ -700,6 +698,7 @@ bindings = [
     ("<Control-f>", apri_trova_sostituisci),
     ("<Control-F>", apri_trova_sostituisci),
     ("<Control-plus>", zoom_in),
+    ("<Control-equal>", zoom_in),  # Aggiunto supporto per il tasto = (più universale)
     ("<Control-minus>", zoom_out),
     ("<Control-0>", reset_zoom),
     ("<Control-z>", lambda e: text_area.edit_undo()),

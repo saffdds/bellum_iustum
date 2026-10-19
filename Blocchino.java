@@ -452,7 +452,7 @@ public class Blocchino {
     }
 
     private static void informazioniSoftware() {
-        JOptionPane.showMessageDialog(finestra, "Blocchino v3.0.0a3 (Java 8 Port)\nAutore: Saffdds\nSupporto: TXT + HTML + Markdown", "Informazioni", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(finestra, "Blocchino v3.0.0 Beta 1 (Java 8 Port)\nAutore: Saffdds\nSupporto: TXT + HTML + Markdown", "Informazioni", JOptionPane.INFORMATION_MESSAGE);
     }
 
     // ============================================================
