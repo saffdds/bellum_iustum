@@ -529,7 +529,7 @@ def vai_al_sito():
 def informazioni_software():
     messagebox.showinfo(
         "Informazioni",
-        "Blocchino v3.0.0 RC-1\n"
+        "Blocchino v3.0.0 RC-2\n"
         "Autore: Saffdds\n"
         "Stato: Sviluppo RC\n"
         "Supporto: TXT + HTML + Markdown",
@@ -698,7 +698,7 @@ bindings = [
     ("<Control-f>", apri_trova_sostituisci),
     ("<Control-F>", apri_trova_sostituisci),
     ("<Control-plus>", zoom_in),
-    ("<Control-equal>", zoom_in),  # Aggiunto supporto per il tasto = (più universale)
+    ("<Control-equal>", zoom_in),
     ("<Control-minus>", zoom_out),
     ("<Control-0>", reset_zoom),
     ("<Control-z>", lambda e: text_area.edit_undo()),
