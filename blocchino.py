@@ -529,9 +529,9 @@ def vai_al_sito():
 def informazioni_software():
     messagebox.showinfo(
         "Informazioni",
-        "Blocchino v3.0.0 RC-2\n"
+        "Blocchino v3.0.0\n"
         "Autore: Saffdds\n"
-        "Stato: Sviluppo RC\n"
+        "Stato:  Stabile\n"
         "Supporto: TXT + HTML + Markdown",
     )
 
